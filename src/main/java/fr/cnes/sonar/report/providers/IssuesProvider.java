@@ -56,10 +56,11 @@ public class IssuesProvider extends AbstractDataProvider {
      * @param pToken String representing the user token.
      * @param pProject The id of the project to report.
      * @param pBranch The branch of the project to report.
+     * @param pFilter The filter for the report.
      */
     public IssuesProvider(final SonarQubeServer pServer, final String pToken, final String pProject,
-            final String pBranch) {
-        super(pServer, pToken, pProject, pBranch);
+            final String pBranch, final String pFilter) {
+        super(pServer, pToken, pProject, pBranch, pFilter);
     }
 
     /**
@@ -112,8 +113,13 @@ public class IssuesProvider extends AbstractDataProvider {
             // get maximum number of results per page
             final int maxPerPage = Integer.parseInt(getRequest(MAX_PER_PAGE_SONARQUBE));
             // prepare the server to get all the issues
-            final String request = String.format(getRequest(GET_ISSUES_REQUEST),
-                    getServer().getUrl(), getProjectKey(), maxPerPage, page, confirmed, getBranch());
+            final String searchFilter = getSearchFilter();
+            final String request = searchFilter.length() > 0 ?
+                    String.format(getRequest(GET_FILTERED_ISSUES_REQUEST),
+                            getServer().getUrl(), getProjectKey(), maxPerPage, page, confirmed, getBranch(), searchFilter)
+                    :
+                    String.format(getRequest(GET_ISSUES_REQUEST),
+                            getServer().getUrl(), getProjectKey(), maxPerPage, page, confirmed, getBranch());
             // perform the request to the server
             final JsonObject jo = request(request);
             // transform json to Issue and Rule objects
@@ -214,8 +220,13 @@ public class IssuesProvider extends AbstractDataProvider {
             // get maximum number of results per page
             final int maxPerPage = Integer.parseInt(getRequest(MAX_PER_PAGE_SONARQUBE));
             // prepare the server to get all the issues
-            final String request = String.format(getRequest(GET_ISSUES_REQUEST),
-                    getServer().getUrl(), getProjectKey(), maxPerPage, page, CONFIRMED, getBranch());
+            final String searchFilter = getSearchFilter();
+            final String request = searchFilter.length() > 0 ?
+                    String.format(getRequest(GET_FILTERED_ISSUES_REQUEST),
+                            getServer().getUrl(), getProjectKey(), maxPerPage, page, CONFIRMED, getBranch(), searchFilter)
+                    :
+                    String.format(getRequest(GET_ISSUES_REQUEST),
+                            getServer().getUrl(), getProjectKey(), maxPerPage, page, CONFIRMED, getBranch());
             // perform the request to the server
             final JsonObject jo = request(request);
             // transform json to Issue objects

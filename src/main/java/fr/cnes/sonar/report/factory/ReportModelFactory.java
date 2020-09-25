@@ -47,6 +47,10 @@ public class ReportModelFactory {
      */
     private String branch;
     /**
+     * Filter for the search api.
+     */
+    private String searchFilter;
+    /**
      * Author of the project to report.
      */
     private String author;
@@ -65,6 +69,7 @@ public class ReportModelFactory {
         this.token = pConfiguration.getToken();
         this.project = pConfiguration.getProject();
         this.branch = pConfiguration.getBranch();
+        this.searchFilter = pConfiguration.getSearchFilter();
         this.author = pConfiguration.getAuthor();
         this.date = pConfiguration.getDate();
     }
@@ -82,7 +87,7 @@ public class ReportModelFactory {
 
         // instantiation of providers
         final ProviderFactory providerFactory = new ProviderFactory(this.server, this.token, this.project,
-                this.branch);
+                this.branch, this.searchFilter);
         final IssuesProvider issuesProvider = providerFactory.create(IssuesProvider.class);
         final MeasureProvider measureProvider = providerFactory.create(MeasureProvider.class);
         final ProjectProvider projectProvider = providerFactory.create(ProjectProvider.class);

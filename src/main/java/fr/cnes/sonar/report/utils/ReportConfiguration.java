@@ -37,6 +37,8 @@ public class ReportConfiguration {
     private String project;
     /** Options for b. */
     private String branch;
+    /** Options for i. */
+    private String searchFilter;
     /** Options for o. */
     private String output;
     /** Options for l. */
@@ -81,8 +83,8 @@ public class ReportConfiguration {
      * @param branch Value for b option.
      */
     private ReportConfiguration(final boolean help, final boolean version, final String server,
-                                final String token, final String project, final String output,
-                                final String language, final String author, final String date,
+                                final String token, final String project, final String searchFilter,
+                                final String output, final String language, final String author, final String date,
                                 final boolean enableConf, final boolean enableReport,
                                 final boolean enableSpreadsheet, final boolean enableCSV,
                                 final boolean enableMarkdown, String templateReport,
@@ -92,6 +94,7 @@ public class ReportConfiguration {
         this.server = server;
         this.token = token;
         this.project = project;
+        this.searchFilter = searchFilter;
         this.output = output;
         this.language = language;
         this.author = author;
@@ -127,6 +130,7 @@ public class ReportConfiguration {
                 commandLineManager.getOptionValue("s", StringManager.getProperty(StringManager.SONAR_URL)),
                 commandLineManager.getOptionValue("t", StringManager.getProperty(StringManager.SONAR_TOKEN)),
                 commandLineManager.getOptionValue("p", StringManager.EMPTY),
+                commandLineManager.getOptionValue("i", StringManager.EMPTY),
                 commandLineManager.getOptionValue("o", StringManager.getProperty(StringManager.DEFAULT_OUTPUT)),
                 commandLineManager.getOptionValue("l", StringManager.getProperty(StringManager.DEFAULT_LANGUAGE)),
                 commandLineManager.getOptionValue("a", StringManager.getProperty(StringManager.DEFAULT_AUTHOR)),
@@ -165,6 +169,10 @@ public class ReportConfiguration {
 
     public String getBranch() {
         return branch;
+    }
+
+    public String getSearchFilter() {
+        return searchFilter;
     }
 
     public String getOutput() {

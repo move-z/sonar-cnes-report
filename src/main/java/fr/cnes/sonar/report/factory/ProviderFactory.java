@@ -44,15 +44,19 @@ public class ProviderFactory {
     /** Branch of the project to report. */
     private String branch;
 
+    /** Extra search filter for the report. */
+    private String searchFilter;
+
     /**
      * Constructor.
      * @param server Represents the server.
      * @param token String representing the user token.
      * @param project The id of the project to report.
      * @param branch The branch of the project to report.
+     * @param searchFilter Extra search filter for the report.
      */
     public ProviderFactory(final SonarQubeServer server, final String token, final String project,
-            final String branch) {
+            final String branch, final String searchFilter) {
         // get sonar server
         this.server = server;
         // get user token
@@ -61,6 +65,8 @@ public class ProviderFactory {
         this.projectKey = project;
         // get branch
         this.branch = branch;
+        // search filter
+        this.searchFilter = searchFilter;
     }
 
     /**
@@ -86,6 +92,8 @@ public class ProviderFactory {
                     provider = constructors[0].newInstance(server, token, projectKey);
                 } else if (4 == constructors[0].getParameterCount()) {
                     provider = constructors[0].newInstance(server, token, projectKey, branch);
+                } else if (5 == constructors[0].getParameterCount()) {
+                    provider = constructors[0].newInstance(server, token, projectKey, branch, searchFilter);
                 }
             }
         } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {

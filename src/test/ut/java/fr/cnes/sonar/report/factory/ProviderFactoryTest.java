@@ -4,7 +4,6 @@ import fr.cnes.sonar.report.CommonTest;
 import fr.cnes.sonar.report.exceptions.BadSonarQubeRequestException;
 import fr.cnes.sonar.report.exceptions.SonarQubeException;
 import fr.cnes.sonar.report.model.Language;
-import fr.cnes.sonar.report.model.SonarQubeServer;
 import fr.cnes.sonar.report.providers.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -17,10 +16,11 @@ public class ProviderFactoryTest extends CommonTest {
     private static final String TOKEN = "token";
     private static final String PROJECT = "project";
     private static final String BRANCH = "branch";
+    private static final String SEARCH_FILTER = "filter";
 
     @Test
     public void createTest() {
-        final ProviderFactory providerFactory = new ProviderFactory(sonarQubeServer, TOKEN, PROJECT, BRANCH);
+        final ProviderFactory providerFactory = new ProviderFactory(sonarQubeServer, TOKEN, PROJECT, BRANCH, SEARCH_FILTER);
         Assert.assertNotNull(providerFactory);
 
         AbstractDataProvider provider = providerFactory.create(IssuesProvider.class);

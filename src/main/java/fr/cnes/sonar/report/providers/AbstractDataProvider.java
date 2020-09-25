@@ -77,6 +77,10 @@ public abstract class AbstractDataProvider {
      */
     protected static final String GET_ISSUES_REQUEST = "GET_ISSUES_REQUEST";
     /**
+     *  Name of the request for getting issues
+     */
+    protected static final String GET_FILTERED_ISSUES_REQUEST = "GET_FILTERED_ISSUES_REQUEST";
+    /**
      *  Name of the request for getting facets
      */
     protected static final String GET_FACETS_REQUEST = "GET_FACETS_REQUEST";
@@ -199,6 +203,11 @@ public abstract class AbstractDataProvider {
     protected String branch;
 
     /**
+     * The search filter for the project
+     */
+    protected String searchFilter;
+
+    /**
      * Name of the used quality gate
      */
     protected String qualityGateName;
@@ -238,6 +247,29 @@ public abstract class AbstractDataProvider {
         this.projectKey = project;
         // get branch
         this.branch = branch;
+    }
+
+    /**
+     * Constructor.
+     * @param server SonarQube server.
+     * @param token String representing the user token.
+     * @param project The id of the project to report.
+     * @param branch The branch of the project to report.
+     */
+    AbstractDataProvider(final SonarQubeServer server, final String token, final String project, final String branch,
+                         final String searchFilter) {
+        // json tool
+        this.gson = new Gson();
+        // get sonar server
+        this.server = server;
+        // get user token
+        this.token = token;
+        // get project key
+        this.projectKey = project;
+        // get branch
+        this.branch = branch;
+        // get search filter
+        this.searchFilter = searchFilter;
     }
 
     /**
@@ -424,6 +456,22 @@ public abstract class AbstractDataProvider {
      */
     public void setBranch(final String branch) {
         this.branch = branch;
+    }
+
+    /**
+     * Extra filter for the request, empty by default
+     * @return the extra query parameters as a String
+     */
+    public String getSearchFilter() {
+        return searchFilter;
+    }
+
+    /**
+     * Setter of searchFilter
+     * @param searchFilter value to give
+     */
+    public void setSearchFilter(final String searchFilter) {
+        this.branch = searchFilter;
     }
 
     /**

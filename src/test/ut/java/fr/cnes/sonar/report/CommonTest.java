@@ -41,6 +41,10 @@ public abstract class CommonTest {
      */
     protected static final String BRANCH = "master";
     /**
+     * Search filter.
+     */
+    protected static final String SEARCH_FILTER = "";
+    /**
      * Quality Gate name.
      */
     protected static final String QUALITY_GATE_NAME = "CNES";
