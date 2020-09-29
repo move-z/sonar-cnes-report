@@ -79,6 +79,16 @@ public class ReportWs implements WebService {
         WebService.NewParam branchParam = report.createParam(PluginStringManager.getProperty("api.report.args.branch"));
         branchParam.setDescription(PluginStringManager.getProperty("api.report.args.description.branch"));
         branchParam.setRequired(false);
+
+        // Adding severities argument
+        WebService.NewParam severitiesParam = report.createParam(PluginStringManager.getProperty("api.report.args.severities"));
+        severitiesParam.setDescription(PluginStringManager.getProperty("api.report.args.description.severities"));
+        severitiesParam.setRequired(false);
+
+        // Adding types argument
+        WebService.NewParam typesParam = report.createParam(PluginStringManager.getProperty("api.report.args.types"));
+        typesParam.setDescription(PluginStringManager.getProperty("api.report.args.description.types"));
+        typesParam.setRequired(false);
     }
 }
 

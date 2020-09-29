@@ -17,8 +17,8 @@
 
 package fr.cnes.sonar.plugin.ws;
 
-import fr.cnes.sonar.plugin.tools.PluginStringManager;
 import fr.cnes.sonar.plugin.tools.FileTools;
+import fr.cnes.sonar.plugin.tools.PluginStringManager;
 import fr.cnes.sonar.plugin.tools.ZipFolder;
 import fr.cnes.sonar.report.ReportCommandLine;
 import fr.cnes.sonar.report.exceptions.BadExportationDataTypeException;
@@ -39,6 +39,11 @@ import org.sonar.api.utils.text.JsonWriter;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class ExportTask implements RequestHandler {
 
@@ -78,7 +83,24 @@ public class ExportTask implements RequestHandler {
         try {
             final Request.StringParam pBranch =
                     request.getParam(PluginStringManager.getProperty("api.report.args.branch"));
-            ReportCommandLine.execute(new String[]{
+
+            StringBuilder filter = new StringBuilder();
+            final List<String> severities =
+                    request.multiParam(PluginStringManager.getProperty("api.report.args.severities"));
+            if (!severities.isEmpty()) {
+                filter.append("severities=").append(String.join(",", severities));
+            }
+
+            final List<String> types =
+                    request.multiParam(PluginStringManager.getProperty("api.report.args.types"));
+            if (!types.isEmpty()) {
+                if (filter.length() > 0) {
+                    filter.append("&");
+                }
+                filter.append("types=").append(String.join(",", types));
+            }
+
+            List<String> params = new ArrayList<>(Arrays.asList(
                     "report",
                     "-o", outputDirectory.getAbsolutePath(),
                     "-s", config.get("sonar.core.serverBaseURL").orElse(PluginStringManager.getProperty("plugin.defaultHost")),
@@ -86,7 +108,15 @@ public class ExportTask implements RequestHandler {
                     "-b", pBranch.isPresent()?pBranch.getValue(): StringManager.NO_BRANCH,
                     "-a", request.getParam(PluginStringManager.getProperty("api.report.args.author")).getValue(),
                     "-t", request.getParam(PluginStringManager.getProperty("api.report.args.token")).getValue()
-            });
+            ));
+            if (filter.length() > 0) {
+                params.add("-i");
+                params.add(filter.toString());
+            }
+            Logger LOGGER = Logger.getLogger(ExportTask.class.getCanonicalName());
+            LOGGER.log(Level.INFO, "Call params: " + String.join(" ", params));
+
+            ReportCommandLine.execute(params.toArray(new String[0]));
 
             stream.setMediaType("application/zip");
             String filename = ReportFactory.formatFilename("zip.report.output", "", projectKey);

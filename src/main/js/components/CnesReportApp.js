@@ -95,6 +95,28 @@ export default class CnesReportApp extends React.PureComponent {
                             </select>
                         </div>
                         <div class='forminput'>
+                            <label for="severities" id="severitiesLabel" class="login-label"><strong>Severities</strong></label>
+                            <select id="severities"
+                                name="severities"
+                                class="login-input multi-input" multiple>
+                                <option value="BLOCKER">Blocker</option>
+                                <option value="CRITICAL">Critical</option>
+                                <option value="MAJOR">Major</option>
+                                <option value="MINOR">Minor</option>
+                                <option value="INFO">Info</option>
+                            </select>
+                        </div>
+                        <div class='forminput'>
+                            <label for="types" id="typesLabel" class="login-label"><strong>Types</strong></label>
+                            <select id="types"
+                                name="types"
+                                class="login-input multi-input" multiple>
+                                <option value="VULNERABILITY">Vulnerability</option>
+                                <option value="BUG">Bug</option>
+                                <option value="CODE_SMELL">Code Smell</option>
+                            </select>
+                        </div>
+                        <div class='forminput'>
                             <label for="author" id="authorLabel" class="login-label"><strong>Author</strong></label>
                             <input type="text"
                                 id="author"
